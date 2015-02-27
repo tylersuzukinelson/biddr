@@ -6,7 +6,7 @@ class Auction < ActiveRecord::Base
 
   def current_price
     unless bids.empty?
-      bids.order(price: :desc).first.price || 0
+      bids.order(price: :desc).first.price + 1 || 0
     else
       0
     end
