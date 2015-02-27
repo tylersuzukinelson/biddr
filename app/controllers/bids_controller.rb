@@ -6,15 +6,22 @@ class BidsController < ApplicationController
     @bid = Bid.new bid_params
     @auction = Auction.find params[:auction_id]
     @bid.auction = @auction
-    begin
-      ActiveRecord::Base.transaction do
-        @bid.save!
-        @auction.meet_reserve! if @bid.price >= @auction.reserve_price
+    @bid.user = current_user
+    if @auction.user == current_user
+      redirect_to @auction, alert: "You cannot bid on your own auction!"
+    else
+      begin
+        ActiveRecord::Base.transaction do
+          @bid.save
+          unless @auction.aasm_state == 'reserve_met'
+            @auction.meet_reserve if @bid.price >= @auction.reserve_price
+          end
+        end
+        redirect_to @auction
+      rescue ActiveRecord::RecordInvalid => e
+        flash[:alert] = e.message
+        redirect_to @auction
       end
-      redirect_to @auction
-    rescue ActiveRecord::RecordInvalid => e
-      flash[:alert] = e.message
-      redirect_to @auction
     end
   end
 
