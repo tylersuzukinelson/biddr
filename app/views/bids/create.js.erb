@@ -1,0 +1,9 @@
+$('#flash-messages').html('');
+<% if @bid.errors.any? %>
+  $('#flash-messages').html('<div class="alert alert-danger"><%= @bid.errors.full_messages.join('; ') %></div>')
+<% else %>
+  $('#bid_price').val('');
+  $('<%= j render partial: "/bids/bid", locals: { bid: @bid } %>').hide().prependTo('#auction-bid-list').fadeIn('slow');
+  $('#current-price').text('Current Price: <%= number_to_currency(@bid.auction.current_price) %>');
+  $('#reserve-price').text('Reserve Price <%= "Not " unless @bid.auction.aasm_state == "reserve_met" %>Met');
+<% end %>

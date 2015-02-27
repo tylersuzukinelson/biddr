@@ -1,6 +1,6 @@
-= number_to_currency(bid.price)
-|  by 
-= link_to bid.user.name, bid.user
-|  on 
-= bid.created_at.strftime("%B %e, %Y")
-br
+.well
+  = number_to_currency(bid.price)
+  |  by 
+  = link_to bid.user.name, bid.user
+  |  on 
+  = bid.created_at.strftime("%B %e, %Y")

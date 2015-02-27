@@ -7,20 +7,21 @@
     p
       = @auction.details
     p
-      = simple_form_for [@auction, @bid], class: "form-horizontal" do |f|
+      = simple_form_for [@auction, @bid], remote: true, class: "form-horizontal" do |f|
         = f.input :price
         = f.submit "Bid", class: "btn btn-default"
     p
       strong
         | Previous Bids:
       br
-      - @auction.bids.order(created_at: :desc).each do |bid|
-        = render partial: "/bids/bid", locals: { bid: bid }
+      #auction-bid-list
+        - @auction.bids.order(created_at: :desc).each do |bid|
+          = render partial: "/bids/bid", locals: { bid: bid }
   .col-md-6
-    p
+    p#current-price
       | Current Price: 
       = number_to_currency(@auction.current_price)
-    p
+    p#reserve-price
       - if @auction.current_price >= @auction.reserve_price
         | Reserve Price Met
       - else

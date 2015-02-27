@@ -20,7 +20,9 @@ html
           #main-menu.collapse.navbar-collapse
             ul.nav.navbar-nav.navbar-left
               li
-                = link_to "Home", root_path
+                = link_to "Auctions", root_path
+              li
+                = link_to "New Auction", new_auction_path
             ul.nav.navbar-nav.navbar-right
               - if user_signed_in?
                 li

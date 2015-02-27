@@ -1,5 +1,5 @@
 h1
   | Bids by 
   = @user.name
-- @user.bids.each do |bid|
+- @user.bids.order(created_at: :desc).each do |bid|
   = render partial: "/bids/user_bid", locals: { bid: bid }

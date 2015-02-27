@@ -7,20 +7,30 @@ class BidsController < ApplicationController
     @auction = Auction.find params[:auction_id]
     @bid.auction = @auction
     @bid.user = current_user
-    if @auction.user == current_user
-      redirect_to @auction, alert: "You cannot bid on your own auction!"
-    else
-      begin
-        ActiveRecord::Base.transaction do
-          @bid.save
-          unless @auction.aasm_state == 'reserve_met'
-            @auction.meet_reserve if @bid.price >= @auction.reserve_price
+    respond_to do |format|
+      if @auction.user == current_user
+        format.html { redirect_to @auction, alert: "You cannot bid on your own auction!" }
+        format.js {
+          @bid.errors.add(:user, "owns this auction! You cannot bid on your own auction")
+          render
+        }
+      else
+        begin
+          ActiveRecord::Base.transaction do
+            @bid.save
+            unless @auction.aasm_state == 'reserve_met'
+              @auction.meet_reserve if @bid.price >= @auction.reserve_price
+            end
           end
+          format.html { redirect_to @auction }
+          format.js { render }
+        rescue ActiveRecord::RecordInvalid => e
+          format.html { redirect_to @auction, alert: e.message }
+          format.js { 
+            @bid.errors.add(:base, get_errors)
+            render
+          }
         end
-        redirect_to @auction
-      rescue ActiveRecord::RecordInvalid => e
-        flash[:alert] = e.message
-        redirect_to @auction
       end
     end
   end
