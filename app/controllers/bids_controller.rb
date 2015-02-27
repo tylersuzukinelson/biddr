@@ -4,10 +4,14 @@ class BidsController < ApplicationController
     @bid = Bid.new bid_params
     @auction = Auction.find params[:auction_id]
     @bid.auction = @auction
-    if @bid.save
+    begin
+      ActiveRecord::Base.transaction do
+        @bid.save!
+        @auction.meet_reserve! if @bid.price >= @auction.reserve_price
+      end
       redirect_to @auction
-    else
-      flash[:alert] = get_errors
+    rescue ActiveRecord::RecordInvalid => e
+      flash[:alert] = e.message
       redirect_to @auction
     end
   end

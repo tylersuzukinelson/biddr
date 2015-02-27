@@ -35,6 +35,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'slim-rails'
 gem 'simple_form'
+gem 'aasm'
 
 group :development, :test do
   gem 'interactive_editor'

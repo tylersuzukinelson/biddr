@@ -9,8 +9,8 @@ class Bid < ActiveRecord::Base
   private
 
   def check_price
-    if price <= auction.current_price
-      errors.add(:price, "must be higher than the auction's current price.")
+    if (price.is_a? Numeric) && (price <= auction.current_price)
+      errors.add(:price, "must be higher than the auction's current price")
     end
   end
 
