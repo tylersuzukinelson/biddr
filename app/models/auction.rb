@@ -6,6 +6,7 @@ class Auction < ActiveRecord::Base
 
   has_many :bids, dependent: :destroy
   has_many :bids_users, through: :bids, source: :user
+  has_one :winning_bid
 
   validates :name, presence: true
 
@@ -27,6 +28,15 @@ class Auction < ActiveRecord::Base
     else
       0
     end
+  end
+
+  def highest_bid
+    bids.order(price: :desc).first if aasm_state == "reserve_met"
+  end
+
+  def highest_bidder
+    @highest_bid = highest_bid
+    @highest_bid.user if @highest_bid
   end
 
 end

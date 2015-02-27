@@ -2,6 +2,10 @@ Rails.application.routes.draw do
   root 'auctions#index'
   resources :auctions do
     resources :bids, only: [:create, :destroy]
+    resources :winning_bids, only: [:create]
+  end
+  resources :winning_bids, only: [] do
+    resources :payments, only: [:new, :create]
   end
   resources :sessions, only: [:new, :create] do
     delete :destroy, on: :collection

@@ -37,6 +37,8 @@ gem 'slim-rails'
 gem 'simple_form'
 gem 'aasm'
 gem 'valid_email'
+gem 'stripe'
+gem 'virtus'
 
 group :development, :test do
   gem 'interactive_editor'

@@ -6,10 +6,25 @@
   .col-md-6
     p
       = @auction.details
-    p
-      = simple_form_for [@auction, @bid], remote: true, class: "form-horizontal" do |f|
-        = f.input :price
-        = f.submit "Bid", class: "btn btn-default"
+    - if @auction.end_date < DateTime.current
+      p
+        strong
+          | This auction has ended! 
+        - if current_user == @auction.highest_bidder
+          | You won this auction!
+          - if current_user.auctions_won.include? @auction
+            |  Thank you for your payment and participation!
+          - else
+            = simple_form_for [@auction, WinningBid.new], class: "form-horizontal" do |f|
+              = f.hidden_field :price, value: @auction.highest_bid.price
+              = f.submit "Pay Now!", class: "btn btn-default"
+        - else
+          | Unfortunately, you did not win this time!
+    - else
+      p
+        = simple_form_for [@auction, @bid], remote: true, class: "form-horizontal" do |f|
+          = f.input :price
+          = f.submit "Bid", class: "btn btn-default"
     p
       strong
         | Previous Bids:
@@ -22,7 +37,7 @@
       | Current Price: 
       = number_to_currency(@auction.current_price)
     p#reserve-price
-      - if @auction.current_price >= @auction.reserve_price
+      - if @auction.aasm_state == "reserve_met"
         | Reserve Price Met
       - else
         | Reserve Price Not Met

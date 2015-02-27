@@ -17,9 +17,9 @@ class BidsController < ApplicationController
       else
         begin
           ActiveRecord::Base.transaction do
-            @bid.save
+            @bid.save!
             unless @auction.aasm_state == 'reserve_met'
-              @auction.meet_reserve if @bid.price >= @auction.reserve_price
+              @auction.meet_reserve! if @bid.price >= @auction.reserve_price
             end
           end
           format.html { redirect_to @auction }
