@@ -7,5 +7,6 @@ class User < ActiveRecord::Base
   has_many :bid_auctions, through: :bids, source: :auction
 
   validates :email, presence: true, email: true
+  validates :password, presence: true
 
 end

@@ -1,0 +1,8 @@
+h1
+  | Register
+= simple_form_for @user, class: "form-horizontal" do |f|
+  = f.input :email
+  = f.input :name
+  = f.input :password
+  = f.input :password_confirmation, required: true
+  = f.submit "Sign In", class: "btn btn-default"
