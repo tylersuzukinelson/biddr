@@ -2,7 +2,10 @@ class Auction < ActiveRecord::Base
 
   include AASM
 
+  belongs_to :user
+
   has_many :bids, dependent: :destroy
+  has_many :bids_users, through: :bids, source: :user
 
   validates :name, presence: true
 
