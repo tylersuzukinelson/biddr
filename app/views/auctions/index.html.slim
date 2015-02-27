@@ -1,0 +1,6 @@
+h1
+  | Auctions
+ol
+  - @auctions.each do |auction|
+    li
+      = link_to auction.name, auction

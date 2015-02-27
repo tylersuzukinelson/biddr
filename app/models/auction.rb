@@ -4,4 +4,12 @@ class Auction < ActiveRecord::Base
 
   validates :name, presence: true
 
+  def current_price
+    unless bids.empty?
+      bids.order(price: :desc).first.price || 0
+    else
+      0
+    end
+  end
+
 end

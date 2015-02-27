@@ -3,7 +3,7 @@ class AuctionsController < ApplicationController
   before_action :get_auction, only: [:show, :edit, :update, :destroy]
 
   def index
-    @auctions = Auction.all
+    @auctions = Auction.order(end_date: :desc)
   end
 
   def new
@@ -21,6 +21,7 @@ class AuctionsController < ApplicationController
   end
 
   def show
+    @bid = Bid.new
   end
 
   def edit

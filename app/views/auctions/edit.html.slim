@@ -1,0 +1,4 @@
+h1
+  | Edit Auction: 
+  = @auction.name
+= render partial: "/auctions/form", locals: { auction: @auction }

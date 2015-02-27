@@ -1,0 +1,30 @@
+.row
+  .col-md-12
+    h1
+      = @auction.name
+.row
+  .col-md-6
+    p
+      = @auction.details
+    p
+      = simple_form_for [@auction, @bid], class: "form-horizontal" do |f|
+        = f.input :price
+        = f.submit "Bid", class: "btn btn-default"
+    p
+      strong
+        | Previous Bids:
+      br
+      - @auction.bids.order(created_at: :desc).each do |bid|
+        = number_to_currency(bid.price)
+        |  on 
+        = bid.created_at.strftime("%B %e, %Y")
+        br
+  .col-md-6
+    p
+      | Current Price: 
+      = number_to_currency(@auction.current_price)
+    p
+      - if @auction.current_price >= @auction.reserve_price
+        | Reserve Price Met
+      - else
+        | Reserve Price Not Met
