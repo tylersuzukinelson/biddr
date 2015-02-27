@@ -1,0 +1,5 @@
+h1
+  | Bids by 
+  = @user.name
+- @user.bids.each do |bid|
+  = render partial: "/bids/user_bid", locals: { bid: bid }

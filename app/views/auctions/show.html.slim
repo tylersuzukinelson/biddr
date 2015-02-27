@@ -15,10 +15,7 @@
         | Previous Bids:
       br
       - @auction.bids.order(created_at: :desc).each do |bid|
-        = number_to_currency(bid.price)
-        |  on 
-        = bid.created_at.strftime("%B %e, %Y")
-        br
+        = render partial: "/bids/bid", locals: { bid: bid }
   .col-md-6
     p
       | Current Price: 
