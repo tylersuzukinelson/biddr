@@ -39,6 +39,7 @@ gem 'aasm'
 gem 'valid_email'
 gem 'stripe'
 gem 'virtus'
+gem 'capybara'
 
 group :development, :test do
   gem 'interactive_editor'
