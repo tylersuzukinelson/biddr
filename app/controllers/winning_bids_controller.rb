@@ -8,7 +8,20 @@ class WinningBidsController < ApplicationController
     @winning_bid.auction = @auction
     @winning_bid.user = current_user
     if @winning_bid.save
-      redirect_to new_winning_bid_payment_path(@winning_bid)
+      if current_user.stripe_customer_token.nil?
+        redirect_to new_winning_bid_payment_path(@winning_bid)
+      else
+        service = Payment::BidAgainWithStripe.new(
+                    user: current_user,
+                    winning_bid: @winning_bid
+                  )
+        if service.call
+          redirect_to @winning_bid.auction, notice: "Thanks for your payment."
+        else
+          @error_message = "Sorry! Something went wrong. Try again."
+          render :new
+        end
+      end
     else
       redirect_to @auction, alert: get_errors
     end
