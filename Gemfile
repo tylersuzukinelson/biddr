@@ -40,6 +40,7 @@ gem 'valid_email'
 gem 'stripe'
 gem 'virtus'
 gem 'capybara'
+gem 'rails_12factor'
 
 group :development, :test do
   gem 'interactive_editor'
