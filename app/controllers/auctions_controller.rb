@@ -8,7 +8,7 @@ class AuctionsController < ApplicationController
   end
 
   def new
-    @auction = Auction.new
+    @auction = Auction.new end_date: (DateTime.current + 1.day)
   end
 
   def create
